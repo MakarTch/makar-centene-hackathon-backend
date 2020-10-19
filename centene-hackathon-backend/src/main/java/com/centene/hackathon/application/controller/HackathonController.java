@@ -13,8 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.centene.hackathon.application.dao.DependentDAO;
 import com.centene.hackathon.application.dao.EnrolleeDAO;
+import com.centene.hackathon.application.exception.APIException;
+import com.centene.hackathon.application.exception.ResourceNotFoundException;
 import com.centene.hackathon.application.model.Dependent;
 import com.centene.hackathon.application.model.Enrollee;
+import com.centene.hackathon.application.service.DependentService;
+import com.centene.hackathon.application.service.EnrolleeService;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -49,8 +54,9 @@ public class HackathonController {
 	@ApiOperation(value = "Finds Enrollee by ID",
 		notes="Returns an Enrollee object", 
 		response = Enrollee.class)
-	public Enrollee findEnrolleeById(@ApiParam(value="ID value for the Enrollee you need to retrieve", required=true)@PathVariable int id) {
-		return enrolleeRepo.findById(id);
+	public Enrollee findEnrolleeById (@ApiParam(value="ID value for the Enrollee you need to retrieve", required=true)@PathVariable int id) {
+		return enrolleeRepo.findById(id)
+				.orElseThrow(() ->new ResourceNotFoundException("Enrollee not found with id: " + id));
 	}
 	
 	@GetMapping("/dependent/{id}")
@@ -58,7 +64,8 @@ public class HackathonController {
 		notes="Returns a Dependent object", 
 		response = Dependent.class)
 	public Dependent findDependentById(@ApiParam(value="ID value for the Dependent you need to retrieve", required=true)@PathVariable int id) {
-		return dependentRepo.findById(id);
+		return dependentRepo.findById(id)
+				.orElseThrow(() ->new ResourceNotFoundException("Dependent not found with id: " + id));
 	}
 		
 	@PostMapping("/enrollee")
@@ -66,7 +73,12 @@ public class HackathonController {
 		notes="Posts a new Enrollee into MySQL", 
 		response = Enrollee.class)
 	public Enrollee postEnrollee(@RequestBody Enrollee enrollee) {
-		return enrolleeRepo.save(enrollee);
+		try {
+			return enrolleeRepo.save(enrollee);
+		} catch (Exception e){
+			throw new APIException(EnrolleeService.verifyEnrollee(enrollee));
+		}
+		
 	}
 	
 	@PostMapping("/dependent")
@@ -74,25 +86,35 @@ public class HackathonController {
 		notes="Posts a new Dependent into MySQL", 
 		response = Dependent.class)
 	public Dependent postDependent(@RequestBody Dependent dependent) {
-		return dependentRepo.save(dependent);
+		try {
+			return dependentRepo.save(dependent);
+		} catch (Exception e) {
+			throw new APIException(DependentService.verifyDependent(dependent));
+		}
 	}
 	
 	@DeleteMapping("/enrollee/{id}")
 	@ApiOperation(value = "Delete Enrollee",
-		notes="Deletes the enrollee by ID as well as the enrollee's dependents")
+		notes="Deletes the enrollee by ID as well as the enrollee's dependents", 
+		response= Enrollee.class)
 	public void deleteEnrollee(@PathVariable int id) {
 		if (dependentRepo.existsByEnrolleeId(id)) {
 			List<Dependent> dependents = dependentRepo.findAllByEnrolleeId(id);
 			for (Dependent dependent : dependents) 
 				dependentRepo.delete(dependent);
 		}
+		enrolleeRepo.findById(id)
+			.orElseThrow(() ->new ResourceNotFoundException("Enrollee not found with id: " + id));
 		enrolleeRepo.deleteById(id);
 	}
 	
 	@DeleteMapping("/dependent/{id}")
 	@ApiOperation(value = "Delete Dependent",
-		notes="Deletes the dependent by its EnrolleeID")
+		notes="Deletes the dependent by its EnrolleeID",
+		response = Dependent.class)
 	public void deleteDependent(@PathVariable int id) {
+		dependentRepo.findById(id)
+			.orElseThrow(() ->new ResourceNotFoundException("Dependent not found with id: " + id));
 		dependentRepo.deleteById(id);
 		
 	}
@@ -102,7 +124,12 @@ public class HackathonController {
 		notes="Updates the enrollee by ID", 
 		response = Enrollee.class)
 	public Enrollee updateEnrollee(@RequestBody Enrollee enrollee) {
-		return enrolleeRepo.save(enrollee);
+		try {
+			return enrolleeRepo.save(enrollee);
+		} catch (Exception e){
+			throw new APIException(EnrolleeService.verifyEnrollee(enrollee));
+		}	
+
 	}
 	
 	@PutMapping("/dependent")
@@ -110,7 +137,11 @@ public class HackathonController {
 		notes="Updates the dependent by ID", 
 		response = Dependent.class)
 	public Dependent updateDependent(@RequestBody Dependent dependent) {
-		return dependentRepo.save(dependent);
+		try {
+			return dependentRepo.save(dependent);
+		} catch (Exception e) {
+			throw new APIException(DependentService.verifyDependent(dependent));
+		}
 	}
 	
 }
