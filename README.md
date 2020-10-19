@@ -2,7 +2,7 @@
 
 Hi!
 
-I was tasked with developing a microservice for teacking the status of enrollees in a health care program. 
+I was tasked with developing a microservice for tracking the status of enrollees in a health care program. 
 
 All enrollees must have an ID, name and activation status and I must be able to perform CRUD operations on all my enrollees. 
 
