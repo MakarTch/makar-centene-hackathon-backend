@@ -34,6 +34,14 @@ public class HackathonController {
 	@Autowired
 	DependentDAO dependentRepo;
 	
+	@Autowired
+	EnrolleeService enrolleeService;
+	
+	@Autowired
+	DependentService dependentService;
+	
+	
+	//Get all Enrollees
 	@GetMapping("/enrollee")
 	@ApiOperation(value = "Finds all Enrollees",
 		notes="Returns a list of Enrollees", 
@@ -42,106 +50,87 @@ public class HackathonController {
 		return enrolleeRepo.findAll();
 	}
 	
+	//Get all Dependents
 	@GetMapping("/dependent")
-	@ApiOperation(value = "Finds all Enrollees",
+	@ApiOperation(value = "Finds all Dependents",
 		notes="Returns a list of all Dependents", 
 		response = Dependent.class)
 	public List<Dependent> findAllDependents(){
 		return dependentRepo.findAll();
 	}
 	
+	//Get Enrollee by ID
 	@GetMapping("/enrollee/{id}")
 	@ApiOperation(value = "Finds Enrollee by ID",
 		notes="Returns an Enrollee object", 
 		response = Enrollee.class)
-	public Enrollee findEnrolleeById (@ApiParam(value="ID value for the Enrollee you need to retrieve", required=true)@PathVariable int id) {
+	public Enrollee findEnrolleeById (@PathVariable int id) {
 		return enrolleeRepo.findById(id)
 				.orElseThrow(() ->new ResourceNotFoundException("Enrollee not found with id: " + id));
 	}
 	
+	//Get Dependent by ID
 	@GetMapping("/dependent/{id}")
 	@ApiOperation(value = "Finds Dependent by ID",
 		notes="Returns a Dependent object", 
 		response = Dependent.class)
-	public Dependent findDependentById(@ApiParam(value="ID value for the Dependent you need to retrieve", required=true)@PathVariable int id) {
+	public Dependent findDependentById(@PathVariable int id) {
 		return dependentRepo.findById(id)
 				.orElseThrow(() ->new ResourceNotFoundException("Dependent not found with id: " + id));
 	}
-		
+	
+	//Post a new Enrollee
 	@PostMapping("/enrollee")
 	@ApiOperation(value = "Posts Enrollee",
 		notes="Posts a new Enrollee into MySQL", 
 		response = Enrollee.class)
 	public Enrollee postEnrollee(@RequestBody Enrollee enrollee) {
-		try {
-			return enrolleeRepo.save(enrollee);
-		} catch (Exception e){
-			throw new APIException(EnrolleeService.verifyEnrollee(enrollee));
-		}
-		
+		return enrolleeService.postEnrollee(enrollee);
 	}
 	
+	//Post a new Dependent
 	@PostMapping("/dependent")
 	@ApiOperation(value = "Posts Dependent",
 		notes="Posts a new Dependent into MySQL", 
 		response = Dependent.class)
 	public Dependent postDependent(@RequestBody Dependent dependent) {
-		try {
-			return dependentRepo.save(dependent);
-		} catch (Exception e) {
-			throw new APIException(DependentService.verifyDependent(dependent));
-		}
+		return dependentService.postDependent(dependent);
 	}
 	
+	//Delete an Enrollee by their ID
 	@DeleteMapping("/enrollee/{id}")
 	@ApiOperation(value = "Delete Enrollee",
 		notes="Deletes the enrollee by ID as well as the enrollee's dependents", 
 		response= Enrollee.class)
 	public void deleteEnrollee(@PathVariable int id) {
-		if (dependentRepo.existsByEnrolleeId(id)) {
-			List<Dependent> dependents = dependentRepo.findAllByEnrolleeId(id);
-			for (Dependent dependent : dependents) 
-				dependentRepo.delete(dependent);
-		}
-		enrolleeRepo.findById(id)
-			.orElseThrow(() ->new ResourceNotFoundException("Enrollee not found with id: " + id));
-		enrolleeRepo.deleteById(id);
+		enrolleeService.deleteEnrollee(id);
 	}
 	
+	//Delete a Dependent by their ID
 	@DeleteMapping("/dependent/{id}")
 	@ApiOperation(value = "Delete Dependent",
 		notes="Deletes the dependent by its EnrolleeID",
 		response = Dependent.class)
 	public void deleteDependent(@PathVariable int id) {
-		dependentRepo.findById(id)
-			.orElseThrow(() ->new ResourceNotFoundException("Dependent not found with id: " + id));
-		dependentRepo.deleteById(id);
-		
+		dependentService.deleteDependent(id);
 	}
 	
-	@PutMapping("/enrollee")
+	//Update an Enrollee
+	@PutMapping("/enrollee/{id}")
 	@ApiOperation(value = "Update Enrollee",
 		notes="Updates the enrollee by ID", 
 		response = Enrollee.class)
-	public Enrollee updateEnrollee(@RequestBody Enrollee enrollee) {
-		try {
-			return enrolleeRepo.save(enrollee);
-		} catch (Exception e){
-			throw new APIException(EnrolleeService.verifyEnrollee(enrollee));
-		}	
-
+	public Enrollee updateEnrollee(@RequestBody Enrollee enrollee, @PathVariable int id) {
+		return enrolleeService.updateEnrollee(enrollee, id);
 	}
 	
-	@PutMapping("/dependent")
+	//Update a Dependent
+	@PutMapping("/dependent/{id}")
 	@ApiOperation(value = "Update Dependent",
 		notes="Updates the dependent by ID", 
 		response = Dependent.class)
-	public Dependent updateDependent(@RequestBody Dependent dependent) {
-		try {
-			return dependentRepo.save(dependent);
-		} catch (Exception e) {
-			throw new APIException(DependentService.verifyDependent(dependent));
-		}
+	public Dependent updateDependent(@RequestBody Dependent dependent, @PathVariable int id) {
+		return dependentService.updateDependent(dependent, id);
 	}
 	
 }

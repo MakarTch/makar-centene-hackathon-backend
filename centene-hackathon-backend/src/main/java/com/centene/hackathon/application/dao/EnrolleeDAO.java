@@ -11,6 +11,4 @@ import com.centene.hackathon.application.model.Enrollee;
 @Repository
 public interface EnrolleeDAO extends JpaRepository<Enrollee, Integer>{
 	List<Enrollee> findAll();
-	//Enrollee findById(int id);
-	Optional<Enrollee> deleteById(int id);
 }

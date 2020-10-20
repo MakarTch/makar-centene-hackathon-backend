@@ -10,8 +10,6 @@ import com.centene.hackathon.application.model.Dependent;
 @Repository
 public interface DependentDAO extends JpaRepository<Dependent, Integer>{
 	List<Dependent> findAll();
-	//Dependent findById(int id);
-	void deleteByEnrolleeId(int id);
 	boolean existsByEnrolleeId(int id);
 	List <Dependent> findAllByEnrolleeId(int id);
 }
