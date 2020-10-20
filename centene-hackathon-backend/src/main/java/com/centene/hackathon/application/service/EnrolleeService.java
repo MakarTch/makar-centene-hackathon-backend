@@ -25,6 +25,17 @@ public class EnrolleeService {
 	 * Controller methods
 	 */
 	
+	//Get all
+	public List<Enrollee> findAllEnrollees(){
+		return enrolleeRepo.findAll();
+	}
+	
+	//Get by ID
+	public Enrollee findEnrolleeById(int id) {
+		return enrolleeRepo.findById(id)
+				.orElseThrow(() ->new ResourceNotFoundException("Enrollee not found with id: " + id));
+	}
+	
 	//Post
 	public Enrollee postEnrollee(Enrollee enrollee) {
 		try {

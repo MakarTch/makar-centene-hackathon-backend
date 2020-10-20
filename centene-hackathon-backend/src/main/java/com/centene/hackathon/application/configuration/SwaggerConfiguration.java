@@ -19,7 +19,7 @@ public class SwaggerConfiguration {
 	public Docket swaggerConfig() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.paths(PathSelectors.ant("/api/*"))
+				.paths(PathSelectors.ant("/**"))
 				.apis(RequestHandlerSelectors.basePackage("com.centene.hackathon.application"))
 				.build()
 				.apiInfo(apiDetails());

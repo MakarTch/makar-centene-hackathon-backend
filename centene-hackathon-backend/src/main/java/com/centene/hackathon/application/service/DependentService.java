@@ -1,5 +1,7 @@
 package com.centene.hackathon.application.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,16 @@ public class DependentService {
 	 * Controller methods
 	 */
 	
+	//Get all
+	public List<Dependent> findAllDependents(){
+		return dependentRepo.findAll();
+	}
+	
+	//Get byID
+	public Dependent findDependentById(int id) {
+		return dependentRepo.findById(id)
+				.orElseThrow(() ->new ResourceNotFoundException("Dependent not found with id: " + id));
+	}
 	//Post
 	public Dependent postDependent(Dependent dependent) {
 		try {
