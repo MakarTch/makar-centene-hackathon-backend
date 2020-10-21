@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.centene.hackathon.application.dao.DependentDAO;
+import com.centene.hackathon.application.dao.EnrolleeDAO;
 import com.centene.hackathon.application.exception.APIException;
 import com.centene.hackathon.application.exception.ResourceNotFoundException;
 import com.centene.hackathon.application.model.Dependent;
@@ -15,6 +16,9 @@ public class DependentService {
 	
 	@Autowired 
 	DependentDAO dependentRepo;
+	
+	@Autowired
+	EnrolleeDAO enrolleeRepo;
 	
 	/*
 	 * Controller methods
@@ -32,11 +36,17 @@ public class DependentService {
 	}
 	//Post
 	public Dependent postDependent(Dependent dependent) {
-		try {
-			return dependentRepo.save(dependent);
-		} catch (Exception e) {
-			throw new APIException(DependentService.verifyDependent(dependent));
+		if(enrolleeRepo.existsById(dependent.getEnrolleeId())) {
+			try {
+				dependent.setId(0);
+				return dependentRepo.save(dependent);
+			} catch (Exception e) {
+				throw new APIException(DependentService.verifyDependent(dependent));
+			}
+		}else {
+			throw new ResourceNotFoundException("Enrollee not found with id: " + dependent.getEnrolleeId());
 		}
+		
 	}
 	
 	//Delete
@@ -69,13 +79,13 @@ public class DependentService {
 		String lastName = dependent.getLastName();
 		String birthDate = dependent.getBirthDate();
 		
-		if (firstName.length() > 50 || lastName.length() >50) {
-			exceptionString+="Your first name and last name can't be more than 50 characters! ";
-		}
-	
-		if (birthDate.length() > 20) {
-			exceptionString+="Niether birth day or phone number can be more than 20 characters! ";
-		}
+		//Checks both first and last name are less than 50 characters
+		if (firstName.length() > 50 || lastName.length() >50) 
+			exceptionString+="Your first name and last name can't be more than 50 characters. ";
+		
+		//Check format of birth date
+		if(!birthDate.matches("[0-9]{2}/[0-9]{2}/[0-9]{4}"))
+			exceptionString+= "Please format birth data as xx/xx/xxxx, for example: 04/09/1995. ";
 	
 		return exceptionString;
 	}

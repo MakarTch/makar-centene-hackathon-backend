@@ -1,6 +1,7 @@
 package com.centene.hackathon.application.model;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.Pattern;  
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,7 +14,9 @@ public class Enrollee {
 	private int id;
 	private String firstName;
 	private String lastName;
+	@Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}", message= "Must enter birth data as xx/xx/xxxx, for example: 04/09/1995")
 	private String birthDate;
+	@Pattern(regexp = "[0-9]{3}-[0-9]{3}-[0-9]{4}", message= "Must enter phone number as xxx-xxx-xxxx, for example: 347-623-7245")
 	private String phoneNumber;
 	private boolean activationStatus;
 	

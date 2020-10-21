@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 @Entity
 public class Dependent {
@@ -15,6 +16,7 @@ public class Dependent {
 	private int enrolleeId;
 	private String firstName;
 	private String lastName;
+	@Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}", message= "Must enter birth data as xx/xx/xxxx, for example: 04/09/1995")
 	private String birthDate;
 	
 	public Dependent() {

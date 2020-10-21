@@ -60,10 +60,10 @@ public class DependentController {
 	
 	//Delete a Dependent by their ID
 	@DeleteMapping("/delete/{id}")
-	@ApiOperation(value = "Delete Dependent",
+	@ApiOperation(value = "Deletes Dependent",
 		notes="Deletes the dependent by ID",
 		response = Dependent.class)
-	public void deleteDependent(@PathVariable int id) {
+	public void deleteDependent(@ApiParam(value = "The Dependent id", required = true) @PathVariable int id) {
 		dependentService.deleteDependent(id);
 	}
 	
@@ -72,7 +72,7 @@ public class DependentController {
 	@ApiOperation(value = "Update Dependent",
 		notes="Updates the dependent by ID", 
 		response = Dependent.class)
-	public Dependent updateDependent(@RequestBody Dependent dependent, @PathVariable int id) {
+	public Dependent updateDependent(@RequestBody Dependent dependent, @ApiParam(value = "The Dependent id", required = true) @PathVariable int id) {
 		return dependentService.updateDependent(dependent, id);
 	}
 }

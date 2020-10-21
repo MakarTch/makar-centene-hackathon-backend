@@ -1,6 +1,9 @@
 package com.centene.hackathon.application.controller;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,7 +51,7 @@ public class EnrolleeController {
 	@ApiOperation(value = "Finds Enrollee by ID",
 		notes="Returns an Enrollee object", 
 		response = Enrollee.class)
-	public Enrollee findEnrolleeById (@PathVariable int id) {
+	public Enrollee findEnrolleeById (@ApiParam(value = "The Enrollee id", required = true) @PathVariable int id) {
 		return enrolleeService.findEnrolleeById(id);
 	}	
 	
@@ -63,10 +66,10 @@ public class EnrolleeController {
 	
 	//Delete an Enrollee by their ID
 	@DeleteMapping("/delete/{id}")
-	@ApiOperation(value = "Delete Enrollee",
+	@ApiOperation(value = "Deletes Enrollee",
 		notes="Deletes the enrollee by ID as well as the enrollee's dependents", 
 		response= Enrollee.class)
-	public void deleteEnrollee(@PathVariable int id) {
+	public void deleteEnrollee(@ApiParam(value = "The Enrollee id", required = true) @PathVariable int id) {
 		enrolleeService.deleteEnrollee(id);
 	}
 	
@@ -75,7 +78,7 @@ public class EnrolleeController {
 	@ApiOperation(value = "Update Enrollee",
 		notes="Updates the enrollee by ID", 
 		response = Enrollee.class)
-	public Enrollee updateEnrollee(@RequestBody Enrollee enrollee, @PathVariable int id) {
+	public Enrollee updateEnrollee(@RequestBody Enrollee enrollee,@ApiParam(value = "The Enrollee id", required = true)  @PathVariable int id) {
 		return enrolleeService.updateEnrollee(enrollee, id);
 	}
 }

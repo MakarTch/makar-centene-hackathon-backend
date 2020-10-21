@@ -39,6 +39,7 @@ public class EnrolleeService {
 	//Post
 	public Enrollee postEnrollee(Enrollee enrollee) {
 		try {
+			enrollee.setId(0);
 			return enrolleeRepo.save(enrollee);
 		} catch (Exception e){
 			throw new APIException(EnrolleeService.verifyEnrollee(enrollee));
@@ -81,14 +82,18 @@ public class EnrolleeService {
 		String birthDate = enrollee.getBirthDate();
 		String phoneNumber = enrollee.getPhoneNumber();
 		
-		if (firstName.length() > 50 || lastName.length() >50) {
-			exceptionString+="Your first name and last name can't be more than 50 characters! ";
-		}
-
-		if (birthDate.length() > 20 || phoneNumber.length()> 20) {
-			exceptionString+="Niether birth day or phone number can be more than 20 characters! ";
-		}
-
+		//Checks both first and last name are less than 50 characters
+		if (firstName.length() > 50 || lastName.length() >50) 
+			exceptionString+="Your first name and last name can't be more than 50 characters. ";
+		
+		//Check format of phone number
+		if (!phoneNumber.matches("[0-9]{3}-[0-9]{3}-[0-9]{4}"))
+			exceptionString += "Please format phone number as xxx-xxx-xxxx, for example: 347-654-8524. ";
+		
+		//Check format of birth date
+		if(!birthDate.matches("[0-9]{2}/[0-9]{2}/[0-9]{4}"))
+			exceptionString+= "Please format birth data as xx/xx/xxxx, for example: 04/09/1995. ";
+		
 		return exceptionString;
 	}
 	
