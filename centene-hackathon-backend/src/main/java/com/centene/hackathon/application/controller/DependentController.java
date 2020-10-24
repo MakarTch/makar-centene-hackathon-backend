@@ -25,8 +25,6 @@ import io.swagger.annotations.ApiParam;
 @CrossOrigin(origins = "http://localhost:3000")
 public class DependentController {
 
-	@Autowired
-	EnrolleeService enrolleeService;
 	
 	@Autowired
 	DependentService dependentService;

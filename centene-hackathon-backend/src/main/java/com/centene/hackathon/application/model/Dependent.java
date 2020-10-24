@@ -71,10 +71,4 @@ public class Dependent {
 		this.birthDate = birthDate;
 	}
 
-	@Override
-	public String toString() {
-		return "Dependent [id=" + id + ", enrolleeId=" + enrolleeId + ", firstName=" + firstName + ", lastName="
-				+ lastName + ", birthDate=" + birthDate + "]";
-	}
-	
 }

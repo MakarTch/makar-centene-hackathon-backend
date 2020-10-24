@@ -94,12 +94,5 @@ public class Enrollee {
 	public void setActivationStatus(boolean activationStatus) {
 		this.activationStatus = activationStatus;
 	}
-
-	@Override
-	public String toString() {
-		return "Enrollee [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate=" + birthDate
-				+ ", phoneNumber=" + phoneNumber + ", activationStatus=" + activationStatus + "]";
-	}
-	
 	
 }
