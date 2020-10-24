@@ -14,11 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.centene.hackathon.application.dao.DependentDAO;
-import com.centene.hackathon.application.dao.EnrolleeDAO;
-import com.centene.hackathon.application.exception.APIException;
-import com.centene.hackathon.application.exception.ResourceNotFoundException;
-import com.centene.hackathon.application.model.Dependent;
 import com.centene.hackathon.application.model.Enrollee;
 import com.centene.hackathon.application.service.DependentService;
 import com.centene.hackathon.application.service.EnrolleeService;
@@ -34,8 +29,6 @@ public class EnrolleeController {
 	@Autowired
 	EnrolleeService enrolleeService;
 	
-	@Autowired
-	DependentService dependentService;
 	
 	//Get all Enrollees
 	@GetMapping("/findAll")

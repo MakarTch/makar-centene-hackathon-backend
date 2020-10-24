@@ -46,7 +46,7 @@ public class Enrollee {
 		this.phoneNumber = null;
 		this.activationStatus = activationStatus;
 	}
-
+	
 	public int getId() {
 		return id;
 	}
