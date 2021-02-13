@@ -1,9 +1,6 @@
 package com.centene.hackathon.application.controller;
 
 import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.centene.hackathon.application.model.Enrollee;
-import com.centene.hackathon.application.service.DependentService;
 import com.centene.hackathon.application.service.EnrolleeService;
 
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +19,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/enrollee")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://makarshealthcareapplication.s3-website.us-east-2.amazonaws.com")
 public class EnrolleeController {
 	
 	@Autowired
@@ -62,8 +58,9 @@ public class EnrolleeController {
 	@ApiOperation(value = "Deletes Enrollee",
 		notes="Deletes the enrollee by ID as well as the enrollee's dependents", 
 		response= Enrollee.class)
-	public void deleteEnrollee(@ApiParam(value = "The Enrollee id", required = true) @PathVariable int id) {
+	public int deleteEnrollee(@ApiParam(value = "The Enrollee id", required = true) @PathVariable int id) {
 		enrolleeService.deleteEnrollee(id);
+		return(id);
 	}
 	
 	//Update an Enrollee

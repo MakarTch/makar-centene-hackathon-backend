@@ -28,7 +28,7 @@ public class SwaggerConfiguration {
 	private ApiInfo apiDetails() {
 		return new ApiInfo(
 				"Health Care System API",
-				"API for Centene Hackathon",
+				"Full CRUD functionality for all enrollees and dependents in a healthcare system",
 				"1.0",
 				"Free to use",
 				new springfox.documentation.service.Contact("Makar Tchekalenkov", 

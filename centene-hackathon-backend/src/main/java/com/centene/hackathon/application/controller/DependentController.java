@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/dependent")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://makarshealthcareapplication.s3-website.us-east-2.amazonaws.com")
 public class DependentController {
 
 	

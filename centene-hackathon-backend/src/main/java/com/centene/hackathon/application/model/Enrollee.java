@@ -14,7 +14,7 @@ public class Enrollee {
 	private int id;
 	private String firstName;
 	private String lastName;
-	@Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}", message= "Must enter birth data as xx/xx/xxxx, for example: 04/09/1995")
+	@Pattern(regexp = "[0-9]{2}/[0-9]{2}/[0-9]{4}", message= "Must enter birth date as xx/xx/xxxx, for example: 04/09/1995")
 	private String birthDate;
 	@Pattern(regexp = "[0-9]{3}-[0-9]{3}-[0-9]{4}", message= "Must enter phone number as xxx-xxx-xxxx, for example: 347-623-7245")
 	private String phoneNumber;
